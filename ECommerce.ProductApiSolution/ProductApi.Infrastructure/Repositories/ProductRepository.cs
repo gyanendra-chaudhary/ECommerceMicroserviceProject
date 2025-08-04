@@ -1,5 +1,6 @@
 ﻿using ECommerce.SharedLibrary.Logs;
 using ECommerce.SharedLibrary.Responses;
+using Microsoft.EntityFrameworkCore;
 using ProductApi.Application.Interfaces;
 using ProductApi.Domain.Entities;
 using ProductApi.Infrastructure.Data;
@@ -35,29 +36,98 @@ namespace ProductApi.Infrastructure.Repositories
             }
         }
 
-        public Task<Response> DeleteAsync(Product entity)
+        public async Task<Response> DeleteAsync(Product entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingProduct = await GetByIdAsync(entity.Id);
+                if (existingProduct is null)
+                    return new Response(false, $"Product with the id {entity.Id} does not exist");
+
+                context.Products.Remove(existingProduct);
+                await context.SaveChangesAsync();
+                return new Response(true, $"Product with the id {entity.Id} deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log the origional exception
+                LogException.LogExceptions(ex);
+                // display scary-free message to the client
+                return new Response(false, "Error occured deleting product");
+
+
+            }
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var products = await context.Products.AsNoTracking().ToListAsync();
+                return products is not null && products.Any() ? products : null!;
+            }
+            catch (Exception ex)
+            {
+                // Log origional Error
+                LogException.LogExceptions(ex);
+                // display scary-free message to the client
+                throw new InvalidOperationException("Error occured retrieving products.");
+            }
         }
 
-        public Task<Product> GetByAsync(Expression<Func<Product, bool>> predicate)
+        public async Task<Product> GetByAsync(Expression<Func<Product, bool>> predicate)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var product = await context.Products.Where(predicate).FirstOrDefaultAsync();
+                return product is not null ? product : null!;
+            }
+            catch (Exception ex)
+            {
+                // Log origional exception
+                LogException.LogExceptions(ex);
+
+                // display scary-free message to the client
+                throw new InvalidOperationException("Error occured retrieving product by predicate");
+            }
         }
 
-        public Task<Product?> GetByIdAsync(int id)
+        public async Task<Product?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var product = await context.Products.FindAsync(id);
+                return product is not null ? product : null;
+            }
+            catch (Exception ex)
+            {
+                // Log Origional Exception
+                LogException.LogExceptions(ex);
+                // display scary-free message to the client
+                throw new Exception("Error occured retrieving product by id");
+
+            }
         }
 
-        public Task<Response> UpdateAsync(Product entity)
+        public async Task<Response> UpdateAsync(Product entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingProduct = await GetByIdAsync(entity.Id);
+                if (existingProduct is null)
+                    return new Response(false, $"Product with the id {entity.Name} does not exist");
+                context.Entry(existingProduct).State = EntityState.Detached;
+                context.Products.Update(entity);
+                await context.SaveChangesAsync();
+                return new Response(true, $"Product with the id {entity.Name} updated successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log the origional exception
+                LogException.LogExceptions(ex);
+                // display scary-free message to the client
+                return new Response(false, "Error occured updating product");
+            }
         }
     }
 }

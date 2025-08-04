@@ -25,6 +25,7 @@ namespace ProductApi.Application.DTOs.Conversions
                 var _products = products!.Select(p => new ProductDto(p.Id, p.Name, p.Quantity, p.Price)).ToList();
                 return (null, _products);
             }
+            return (null, null);
         }
     }
 }
