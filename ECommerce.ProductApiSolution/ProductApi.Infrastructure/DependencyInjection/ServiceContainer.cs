@@ -1,5 +1,4 @@
 ﻿using ECommerce.SharedLibrary.DependencyInjection;
-using ECommerce.SharedLibrary.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +21,8 @@ namespace ProductApi.Infrastructure.DependencyInjection
 
             return services;
         }
-    }
-    public static IApplicationBuilder UseInfrastructurePolicies(this IApplicationBuilder app)
+
+        public static IApplicationBuilder UseInfrastructurePolicies(this IApplicationBuilder app)
         {
             // Register middlewars
             // Global Exception: handles external errors.
