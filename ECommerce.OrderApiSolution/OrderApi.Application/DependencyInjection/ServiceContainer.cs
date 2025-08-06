@@ -42,6 +42,7 @@ namespace OrderApi.Application.DependencyInjection
             {
                 builder.AddRetry(retryStrategy);
             });
+            return services;
         }
     }
 }

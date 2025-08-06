@@ -17,10 +17,10 @@ namespace OrderApi.Infrastructure.DependencyInjection
             // Add Authentication scheme
 
             SharedServiceContainer.AddSharedServices<OrderDbContext>(services, configuration, configuration["MySerilog:FileName"]!);
-            
+
             // Create dependency Injection
             services.AddScoped<IOrder, OrderRepository>();
-                        return services;
+            return services;
         }
 
         public static IApplicationBuilder UserInfrastructurePolicy(this IApplicationBuilder app)
