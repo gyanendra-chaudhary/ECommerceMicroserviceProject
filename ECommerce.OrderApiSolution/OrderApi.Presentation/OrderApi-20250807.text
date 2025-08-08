@@ -1,0 +1,4 @@
+2025-08-07 11:02:00.295 +05:45 [WRN] OnRetry, Attempt: 0 OutCome: The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.
+2025-08-07 11:02:01.820 +05:45 [WRN] OnRetry, Attempt: 1 OutCome: The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.
+2025-08-07 11:04:37.078 +05:45 [INF] Object reference not set to an instance of an object.
+2025-08-07 11:04:37.081 +05:45 [WRN] Object reference not set to an instance of an object.
